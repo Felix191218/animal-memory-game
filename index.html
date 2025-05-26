@@ -62,7 +62,7 @@
 </head>
 <body>
   <h1>🐾 Animal Memory Match</h1>
-  <div id="stats">时间: 0 秒 | 配对数: 0 / 8</div>
+  <div id="stats">Time: 0 seconds | Matches: 0 / 8</div>
   <div class="game-board" id="board"></div>
 
   <script>
@@ -88,7 +88,7 @@
 
     // 更新状态显示
     function updateStats() {
-      stats.innerText = `时间: ${seconds} 秒 | 配对数: ${matches} / ${animals.length}`;
+        stats.innerText = `Time: ${seconds} seconds | Matches: ${matches} / ${animals.length}`;
     }
 
     // 重置游戏
@@ -135,7 +135,7 @@
               resetSelection();
               if (matches === animals.length) {
                 clearInterval(timerInterval);
-                setTimeout(() => alert(`恭喜你！用时 ${seconds} 秒完成配对！`), 300);
+                setTimeout(() => alert(`Congratulations! You completed matching in ${seconds} seconds!`), 300);
               }
             } else {
               setTimeout(() => {
