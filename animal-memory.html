@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Animal Memory Match Game</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      user-select: none;
+    }
+    h1 {
+      margin-bottom: 5px;
+      color: #333;
+    }
+    #stats {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #222;
+    }
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(4, 110px);
+      gap: 12px;
+    }
+    .card {
+      width: 110px;
+      height: 110px;
+      background: #556270;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 48px;
+      color: transparent;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      transition: background 0.3s, color 0.3s, transform 0.3s;
+      user-select: none;
+      position: relative;
+      transform-style: preserve-3d;
+      perspective: 600px;
+    }
+    .card.flipped, .card.matched {
+      background: #f7f7f7;
+      color: #333;
+      cursor: default;
+      transform: rotateY(180deg);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .card.matched {
+      background: #4caf50;
+      color: white;
+      cursor: default;
+      box-shadow: 0 0 10px #4caf50;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐾 Animal Memory Match</h1>
+  <div id="stats">时间: 0 秒 | 配对数: 0 / 8</div>
+  <div class="game-board" id="board"></div>
+
+  <script>
+    const board = document.getElementById("board");
+    const stats = document.getElementById("stats");
+
+    const animals = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼'];
+    let cards = [...animals, ...animals].sort(() => Math.random() - 0.5);
+
+    let first = null, second = null;
+    let matches = 0;
+    let busy = false;
+    let seconds = 0;
+    let timerInterval = null;
+
+    // 启动计时器
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        seconds++;
+        updateStats();
+      }, 1000);
+    }
+
+    // 更新状态显示
+    function updateStats() {
+      stats.innerText = `时间: ${seconds} 秒 | 配对数: ${matches} / ${animals.length}`;
+    }
+
+    // 重置游戏
+    function resetGame() {
+      first = null;
+      second = null;
+      matches = 0;
+      seconds = 0;
+      updateStats();
+      board.innerHTML = '';
+      cards = [...animals, ...animals].sort(() => Math.random() - 0.5);
+      busy = false;
+      if (timerInterval) clearInterval(timerInterval);
+      startTimer();
+      createCards();
+    }
+
+    // 创建卡片元素
+    function createCards() {
+      cards.forEach((animal, i) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.animal = animal;
+        card.dataset.index = i;
+        card.innerText = animal;
+        card.style.color = 'transparent';
+
+        card.addEventListener('click', () => {
+          if (busy) return;
+          if (card.classList.contains('matched') || card === first || card === second) return;
+
+          flipCard(card);
+
+          if (!first) {
+            first = card;
+          } else if (!second) {
+            second = card;
+            busy = true;
+            if (first.dataset.animal === second.dataset.animal) {
+              first.classList.add('matched');
+              second.classList.add('matched');
+              matches++;
+              updateStats();
+              resetSelection();
+              if (matches === animals.length) {
+                clearInterval(timerInterval);
+                setTimeout(() => alert(`恭喜你！用时 ${seconds} 秒完成配对！`), 300);
+              }
+            } else {
+              setTimeout(() => {
+                unflipCard(first);
+                unflipCard(second);
+                resetSelection();
+              }, 1000);
+            }
+          }
+        });
+
+        board.appendChild(card);
+      });
+    }
+
+    function flipCard(card) {
+      card.classList.add('flipped');
+      card.style.color = '#333';
+    }
+    function unflipCard(card) {
+      card.classList.remove('flipped');
+      card.style.color = 'transparent';
+    }
+    function resetSelection() {
+      [first, second] = [null, null];
+      busy = false;
+    }
+
+    // 初始化
+    resetGame();
+
+  </script>
+</body>
+</html>
