@@ -70,7 +70,17 @@
     const board = document.getElementById("board");
     const stats = document.getElementById("stats");
 
-    const animals = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼'];
+    const animals = [
+      'https://github.com/Felix191218/animal-memory-game/blob/main/labubu-images/labubu1.png?raw=true',
+      'https://github.com/Felix191218/animal-memory-game/blob/main/labubu-images/labubu2.png?raw=true',
+      'https://github.com/Felix191218/animal-memory-game/blob/main/labubu-images/labubu3.png?raw=true',
+      'https://github.com/Felix191218/animal-memory-game/blob/main/labubu-images/labubu4.png?raw=true',
+      'https://github.com/Felix191218/animal-memory-game/blob/main/labubu-images/labubu5.png?raw=true',
+      'https://github.com/Felix191218/animal-memory-game/blob/main/labubu-images/labubu6.png?raw=true',
+      'https://github.com/Felix191218/animal-memory-game/blob/main/labubu-images/labubu7.png?raw=true',
+      'https://github.com/Felix191218/animal-memory-game/blob/main/labubu-images/labubu8.png?raw=true'
+      
+    ];
     let cards = [...animals, ...animals].sort(() => Math.random() - 0.5);
 
     let first = null, second = null;
