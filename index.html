@@ -129,13 +129,17 @@
         imgElement.src = animal;  // 设置图像URL
         imgElement.style.width = '100%';  // 填充卡片
         imgElement.style.height = '100%';  // 填充卡片
-        card.appendChild(imgElement);
+        imgElement.style.display = 'none';  // 默认不显示图像
+        card.appendChild(imgElement);  // 将图像添加到卡片中
 
         card.addEventListener('click', () => {
           if (busy) return;
           if (card.classList.contains('matched') || card === first || card === second) return;
 
           flipCard(card);
+
+          // 显示图像
+          imgElement.style.display = 'block';  // 点击时显示图像
 
           if (!first) {
             first = card;
